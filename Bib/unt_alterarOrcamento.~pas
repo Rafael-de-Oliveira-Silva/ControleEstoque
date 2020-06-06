@@ -1,0 +1,61 @@
+unit unt_alterarOrcamento;
+
+interface
+
+uses
+  Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
+  Dialogs, StdCtrls, Buttons;
+
+type
+  TF_AlterarOrcamento = class(TForm)
+    lbl_conta: TLabel;
+    lbl_Orcamento: TLabel;
+    lbl_Gastos: TLabel;
+    lbl_Saldo: TLabel;
+    edt_Conta: TEdit;
+    edt_Orcamento: TEdit;
+    edt_Gastos: TEdit;
+    edt_Saldo: TEdit;
+    btn_Gravar: TBitBtn;
+    btn_Sair: TBitBtn;
+    procedure btn_GravarClick(Sender: TObject);
+    procedure btn_SairClick(Sender: TObject);
+  private
+    { Private declarations }
+  public
+    { Public declarations }
+  end;
+
+var
+  F_AlterarOrcamento: TF_AlterarOrcamento;
+
+implementation
+
+{$R *.dfm}
+uses unt_dmBanco;
+
+procedure TF_AlterarOrcamento.btn_GravarClick(Sender: TObject);
+var
+    REC_ORCADO: Real;
+    REC_GASTOS: Real;
+    REC_SALDO: Real;
+begin
+     DM_Banco.tabOrcamento.Edit;
+     DM_Banco.tabOrcamento.FieldByName('DescConta').AsString := (edt_Conta.Text);
+     DM_Banco.tabOrcamento.FieldByName('Orcado').AsString := (edt_Orcamento.Text);
+     DM_Banco.tabOrcamento.FieldByName('Gastos').AsString := (edt_Gastos.Text);
+     DM_Banco.tabOrcamento.FieldByName('SaldoAtual').AsString := (edt_Saldo.Text);
+     REC_ORCADO := (DM_Banco.tabOrcamento.FieldByName('Orcado').Value);
+     REC_GASTOS := (DM_Banco.tabOrcamento.FieldByName('Gastos').Value);
+     REC_SALDO := REC_ORCADO - REC_GASTOS;
+     DM_Banco.tabOrcamento.FieldByName('SaldoAtual').AsString := FloatToStr(REC_SALDO);
+     DM_Banco.tabOrcamento.Post;
+     F_AlterarOrcamento.Close;
+end;
+
+procedure TF_AlterarOrcamento.btn_SairClick(Sender: TObject);
+begin
+   F_AlterarOrcamento.Close;
+end;
+
+end.
